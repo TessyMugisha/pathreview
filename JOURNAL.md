@@ -44,6 +44,7 @@ tests/` both return no matches, `tests/fixtures/` does not exist, and
 user-profile fixture. The 53 failures in the suite are pre-existing seeded bugs in
 unrelated modules, not caused by this gap.
 
+**PLAN.md: https://github.com/TessyMugisha/pathreview/blob/test/106-restore-basic-profile-fixture/PLAN.md
 
 **Blockers or open questions:**
 The issue describes skipped integration tests that don't exist in the current
