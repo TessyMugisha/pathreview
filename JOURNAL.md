@@ -30,3 +30,24 @@ show the pattern to follow, and success is verifiable by running the
 previously-skipped tests. Maintainer estimate is 1–2 hours, which fits my
 availability. Main risk is getting the JSON schema right, which I can check
 against the profile model in the codebase.
+
+## Week 8 — Reproduction & solution planning
+
+**Reproduction commit link:** [paste after you commit]
+
+**Reproduction summary:**
+I ran `make test-unit` and confirmed the suite runs but no test references the
+missing fixture — `grep -rn "basic_profile" tests/` and `grep -rn "sample_profiles"
+tests/` both return no matches, `tests/fixtures/` does not exist, and
+`tests/integration/` contains only `__init__.py`. `tests/conftest.py` provides only
+`sample_resume_text` and `sample_readme_text`, confirming there is no shared
+user-profile fixture. The 53 failures in the suite are pre-existing seeded bugs in
+unrelated modules, not caused by this gap.
+
+
+**Blockers or open questions:**
+The issue describes skipped integration tests that don't exist in the current
+codebase, so there's nothing to un-skip — I plan to add a consumer test alongside
+the fixture so it isn't an orphaned file. I also need to confirm how the two repos
+should be represented, since `Profile` has no repos field and repo data appears to
+live in `IngestedSource` / `agent/tools/github_tool.py`.
