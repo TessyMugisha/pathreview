@@ -94,7 +94,7 @@ unchanged rather than trying to fix them.
 
 ### Check-in 2 (end of week)
 
-**PR link:** [paste after opening the PR against ascherj/pathreview]
+**PR link:** https://github.com/ascherj/pathreview/pull/756
 
 **Branch:** `test/106-restore-basic-profile-fixture`
 
