@@ -112,6 +112,18 @@ timestamps are timezone-aware, and that both repo entries carry the fields
 downstream tooling reads. `tests/conftest.py` (updated) — added the
 `sample_user_profile` fixture.
 
-**Self-review confirmation:** [ ] make check passes  [ ] make test-unit passes
+**Self-review confirmation:** [x] make check passes  [x] make test-unit passes
+
+Recorded against the documented pre-existing baseline, per the module guidance that
+"passes" means my changes introduce no new failures. Unit tests: 53 failed / 375
+passed before, 53 failed / 384 passed after — same 53 failures, plus my 9 new passing
+tests. `ruff check .`: 182 errors before and after. `black --check .`: 52 files before
+and after. My three files are clean under both `ruff check` and `black --check`.
+
+Note on tooling: `make` isn't available in PowerShell on my machine, so I ran the
+underlying commands directly (`.venv\Scripts\pytest tests/unit -v -m unit`,
+`.venv\Scripts\ruff check .`). I deliberately did not run `make check` as a whole,
+because its `format` target is `black .` rather than `black --check .` and would have
+rewritten 52 unrelated files into my diff.
 
 **Draft PR feedback received from:** [name or Slack handle, or "none"]
