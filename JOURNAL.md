@@ -127,3 +127,51 @@ because its `format` target is `black .` rather than `black --check .` and would
 rewritten 52 unrelated files into my diff.
 
 **Draft PR feedback received from:** [name or Slack handle, or "none"]
+
+## Week 10 — Iteration & reflection
+
+### Reviewer feedback
+
+**Feedback received:** [ ] Yes  [x] No — still awaiting review
+
+**Summary of feedback:**
+[What did reviewers comment on? Or note that no review came in.]
+- No Response
+**How you responded:**
+[What changes did you make, or what did you reply? If no feedback,
+leave blank.]
+
+---
+
+### Reflection
+
+**What was harder than you expected?**
+[Be specific — what part of the process, codebase, or workflow
+surprised you?]
+The issue itself.#106 said integration tests were being skipped because the fixture was missing, so I expected to restore a file and watch some skipped tests turn green. When I actually looked, grep -rn "basic_profile" tests/ returned nothing and tests/integration/ was just an __init__.py — there were no skipped tests, and never had been. I'd assumed the issue description was ground truth. Realizing I had to verify the premise before planning the fix, and then decide what "done" meant on my own (restore the fixture and write a consumer, or ship an orphaned file), was the part that took the most thinking.
+
+**What did you learn about working in a large codebase?**
+[What's different about contributing to someone else's production code
+vs. building your own project?]
+
+You have to discover the constraints in the project rather than in your own project where you know the codebase. To decide the shape of a single JSON fixture I had to read core/models/profile.py for the actual columns, api/schemas/profile.py to find that resume_text exists on the model but in no schema, core/services/review_service.py to learn repos aren't a Profile column at all, and agent/tools/github_tool.py to see what a repo entry needs to expose. In my own project all of that is in my head.
+
+The other thing: you don't get to fix what's broken around you. There are 53 failing tests and 182 lint errors in this repo and none of them were mine to touch. Learning to work cleanly inside a mess and to prove I left it exactly as messy as I found it was a skill.
+
+**How did AI tools help — and where did they fall short?**
+[Where was AI assistance most useful this module? Where did you need
+to go beyond what AI could give you?]
+
+Most useful in tracing where repo data actually lives across four modules, and matching the existing test conventions in tests/unit/ so my file didn't look foreign.
+
+Where it fell short was it couldn't tell me the issue was wrong.#106 described skipped integration tests that don't exist. An AI given that issue will confidently implement the fix as described. Running grep -rn "basic_profile" tests/ myself and finding nothing was the thing that changed the whole shape of the work. Same with my environment: make isn't on Windows PowerShell, and the repo showed 143 files as modified from line endings. Nothing external could see that but me.
+
+**What would you do differently if you started over?**
+[Issue selection, planning, implementation, or process — anything
+you'd change?]
+
+I'd have commented on issue#106 asking the maintainer how repos should be represented, instead of inferring it from github_tool.py and flagging the guess in my PR
+
+**What are you most proud of from this module?**
+[One thing — it doesn't have to be the PR itself.]
+- The test that asserts the fixture's keys equal Profile.__table__.columns. My first instinct was to hardcode the expected field names, which would have just restated the JSON in Python. Comparing against the model instead means the test fails if someone adds a column and forgets the fixture. It's a small thing, but it's the difference between a test that exists and a test that does work.
